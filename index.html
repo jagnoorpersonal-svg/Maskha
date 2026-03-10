@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Story for Mashka 📖</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Nunito:wght@400;600;700;900&family=Dancing+Script:wght@600;700&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --gold:#f4c842;
+  --gold-dark:#c9980a;
+  --cream:#fdf6e3;
+  --rust:#c0392b;
+  --forest:#1a472a;
+  --forest-light:#2d6a4f;
+  --brown:#5c3317;
+  --parchment:#f5e6c8;
+  --ink:#2c1810;
+  --rose:#e8748a;
+  --accent:#8b2fc9;
+}
+
+body{
+  background: #0d1b0f;
+  background-image:
+    radial-gradient(ellipse at 20% 20%, rgba(26,71,42,0.4) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 80%, rgba(139,47,201,0.15) 0%, transparent 60%),
+    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f4c842' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  color:var(--cream);
+  font-family:'Nunito',sans-serif;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* ── Canvas BG ── */
+#bg-canvas{
+  position:fixed;top:0;left:0;
+  width:100%;height:100%;
+  pointer-events:none;z-index:0;
+}
+
+/* ── Scenes ── */
+.scene{
+  display:none;
+  position:relative;z-index:1;
+  min-height:100vh;
+  flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:30px 16px;
+  text-align:center;
+  animation:sceneFadeIn .7s cubic-bezier(.4,0,.2,1);
+}
+.scene.active{display:flex}
+
+@keyframes sceneFadeIn{
+  from{opacity:0;transform:translateY(30px) scale(.97)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+
+/* ── Book / parchment card ── */
+.book{
+  position:relative;
+  background: linear-gradient(160deg, #fdf6e3 0%, #f5e6c8 40%, #ecd9b0 100%);
+  border-radius:4px 18px 18px 4px;
+  padding:50px 55px;
+  max-width:680px;width:100%;
+  color:var(--ink);
+  box-shadow:
+    -6px 0 0 #c9980a,
+    -10px 0 0 #b8860b,
+    0 20px 60px rgba(0,0,0,.6),
+    inset 0 0 80px rgba(244,200,66,.08);
+  border:1px solid rgba(201,152,10,.4);
+}
+
+/* book spine decoration */
+.book::before{
+  content:'';
+  position:absolute;left:-6px;top:10px;bottom:10px;
+  width:6px;
+  background:linear-gradient(180deg,#f4c842,#c9980a 50%,#f4c842);
+  border-radius:3px 0 0 3px;
+}
+
+/* corner flourish */
+.book::after{
+  content:'❧';
+  position:absolute;bottom:18px;right:22px;
+  font-size:1.8rem;color:var(--gold-dark);opacity:.4;
+}
+
+.chapter-label{
+  font-family:'Playfair Display',serif;
+  font-size:.75rem;font-weight:700;
+  letter-spacing:4px;text-transform:uppercase;
+  color:var(--gold-dark);
+  margin-bottom:18px;
+  opacity:.8;
+}
+
+h1.title{
+  font-family:'Playfair Display',serif;
+  font-size:2.4rem;font-weight:900;
+  color:var(--ink);
+  line-height:1.25;
+  margin-bottom:20px;
+  text-shadow:1px 1px 0 rgba(255,255,255,.6);
+}
+
+h2.subtitle{
+  font-family:'Playfair Display',serif;
+  font-size:1.5rem;font-style:italic;
+  color:var(--brown);
+  margin-bottom:22px;
+}
+
+.divider{
+  margin:22px 0;
+  display:flex;align-items:center;gap:12px;
+  color:var(--gold-dark);font-size:.9rem;opacity:.6;
+}
+.divider::before,.divider::after{
+  content:'';flex:1;height:1px;
+  background:linear-gradient(to right,transparent,var(--gold-dark),transparent);
+}
+
+p.txt{
+  font-size:1.05rem;line-height:1.9;
+  color:#3a2010;
+  margin-bottom:14px;
+  font-family:'Playfair Display',serif;
+}
+p.txt em{color:var(--rust);font-style:italic}
+p.txt strong{color:var(--forest)}
+
+.handwriting{
+  font-family:'Dancing Script',cursive;
+  font-size:1.4rem;color:var(--rust);
+  margin:10px 0;
+  display:block;
+}
+
+/* ── Buttons ── */
+.btn{
+  display:inline-block;
+  padding:13px 38px;margin:8px;
+  border-radius:40px;
+  font-family:'Nunito',sans-serif;
+  font-size:1rem;font-weight:800;
+  cursor:pointer;border:none;
+  transition:all .25s ease;
+  letter-spacing:.5px;
+  position:relative;overflow:hidden;
+}
+.btn::after{
+  content:'';position:absolute;inset:0;
+  background:rgba(255,255,255,0);
+  transition:background .2s;
+}
+.btn:hover::after{background:rgba(255,255,255,.12)}
+
+.btn-gold{
+  background:linear-gradient(135deg,#f4c842,#e6a817);
+  color:var(--ink);
+  box-shadow:0 4px 20px rgba(244,200,66,.45),inset 0 1px 0 rgba(255,255,255,.3);
+}
+.btn-gold:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(244,200,66,.6)}
+
+.btn-green{
+  background:linear-gradient(135deg,#2d6a4f,#1a472a);
+  color:#d4edda;
+  box-shadow:0 4px 18px rgba(45,106,79,.5);
+}
+.btn-green:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(45,106,79,.7)}
+
+.btn-red{
+  background:linear-gradient(135deg,#c0392b,#96281b);
+  color:#fff;
+  box-shadow:0 4px 18px rgba(192,57,43,.45);
+}
+.btn-red:hover{transform:translateY(-3px)}
+
+.btn-ghost{
+  background:transparent;
+  border:2px solid var(--gold-dark);
+  color:var(--gold-dark);
+}
+.btn-ghost:hover{background:rgba(244,200,66,.1);transform:translateY(-2px)}
+
+/* ── Emoji big ── */
+.hero-emoji{
+  font-size:5rem;margin:15px 0;
+  display:block;
+  animation:wobble 3s ease-in-out infinite;
+}
+@keyframes wobble{
+  0%,100%{transform:translateY(0) rotate(-3deg)}
+  50%{transform:translateY(-12px) rotate(3deg)}
+}
+
+.horse-emoji{
+  font-size:4rem;
+  display:inline-block;
+  animation:horseHead 1.8s ease-in-out infinite;
+}
+@keyframes horseHead{
+  0%,100%{transform:rotate(-8deg) scale(1)}
+  50%{transform:rotate(8deg) scale(1.05)}
+}
+
+/* ── Progress bar ── */
+#progress-bar-wrap{
+  position:fixed;top:0;left:0;right:0;
+  height:4px;z-index:200;
+  background:rgba(0,0,0,.3);
+}
+#progress-bar{
+  height:100%;
+  background:linear-gradient(90deg,#2d6a4f,#f4c842,#c0392b);
+  transition:width .6s ease;
+  box-shadow:0 0 10px rgba(244,200,66,.6);
+}
+
+/* ── Chapter badge ── */
+.chapter-badge{
+  position:absolute;top:-18px;left:50%;transform:translateX(-50%);
+  background:linear-gradient(135deg,#1a472a,#2d6a4f);
+  color:var(--gold);
+  font-family:'Playfair Display',serif;
+  font-size:.75rem;font-weight:700;
+  letter-spacing:3px;text-transform:uppercase;
+  padding:6px 22px;border-radius:30px;
+  border:1px solid rgba(244,200,66,.4);
+  box-shadow:0 4px 15px rgba(0,0,0,.4);
+  white-space:nowrap;
+}
+
+/* ── Image popup (meme) ── */
+#img-overlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.7);
+  z-index:9000;display:none;
+  align-items:center;justify-content:center;
+  animation:popIn .2s ease;
+}
+#img-overlay.show{display:flex}
+@keyframes popIn{from{opacity:0}to{opacity:1}}
+#img-overlay img{
+  max-width:min(380px,90vw);
+  max-height:80vh;
+  border-radius:16px;
+  border:4px solid var(--gold);
+  box-shadow:0 0 60px rgba(0,0,0,.8);
+  animation:imgBounce .3s cubic-bezier(.4,0,.2,1);
+}
+@keyframes imgBounce{
+  0%{transform:scale(.6) rotate(-5deg)}
+  70%{transform:scale(1.05) rotate(2deg)}
+  100%{transform:scale(1) rotate(0)}
+}
+
+/* ── Horse steal ── */
+#horse-steal{
+  position:fixed;
+  font-size:3.5rem;
+  z-index:9999;
+  pointer-events:none;
+  display:none;
+  white-space:nowrap;
+  filter:drop-shadow(2px 2px 4px rgba(0,0,0,.5));
+}
+
+/* ── TIC TAC TOE ── */
+.ttt-board{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  width:240px;margin:25px auto;
+}
+.ttt-cell{
+  width:74px;height:74px;
+  background:rgba(26,71,42,.15);
+  border:2px solid rgba(201,152,10,.4);
+  border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:2.2rem;cursor:pointer;
+  transition:all .2s;
+  font-family:'Playfair Display',serif;
+}
+.ttt-cell:hover:not(.taken){
+  background:rgba(244,200,66,.1);
+  border-color:var(--gold);
+  transform:scale(1.05);
+}
+.ttt-cell.taken{cursor:default}
+.ttt-cell.x-cell{color:var(--rust)}
+.ttt-cell.o-cell{color:var(--forest)}
+.ttt-cell.win-cell{
+  background:rgba(244,200,66,.2);
+  border-color:var(--gold);
+  animation:cellPulse .5s ease infinite alternate;
+}
+@keyframes cellPulse{
+  from{box-shadow:0 0 0 transparent}
+  to{box-shadow:0 0 15px rgba(244,200,66,.6)}
+}
+.ttt-status{
+  font-family:'Playfair Display',serif;
+  font-size:1rem;
+  color:var(--brown);
+  min-height:28px;
+  font-style:italic;
+  margin-bottom:8px;
+}
+
+/* ── QUIZ ── */
+.quiz-question{
+  font-family:'Playfair Display',serif;
+  font-size:1.1rem;color:var(--ink);
+  line-height:1.7;margin-bottom:18px;
+  font-style:italic;
+}
+.quiz-options{
+  display:flex;flex-direction:column;gap:10px;
+  margin-bottom:20px;
+}
+.quiz-opt{
+  background:rgba(26,71,42,.08);
+  border:2px solid rgba(26,71,42,.2);
+  border-radius:12px;
+  padding:12px 20px;
+  cursor:pointer;
+  font-family:'Nunito',sans-serif;
+  font-size:.95rem;font-weight:700;
+  color:var(--ink);
+  transition:all .2s;
+  text-align:left;
+}
+.quiz-opt:hover:not(.answered){
+  background:rgba(244,200,66,.15);
+  border-color:var(--gold-dark);
+  transform:translateX(4px);
+}
+.quiz-opt.correct{
+  background:rgba(45,106,79,.2);
+  border-color:var(--forest);
+  color:var(--forest);
+}
+.quiz-opt.wrong{
+  background:rgba(192,57,43,.15);
+  border-color:var(--rust);
+  color:var(--rust);
+}
+.quiz-score{
+  font-family:'Dancing Script',cursive;
+  font-size:1.3rem;color:var(--brown);
+}
+.quiz-progress{
+  display:flex;gap:6px;justify-content:center;margin-bottom:18px;
+}
+.q-dot{
+  width:10px;height:10px;border-radius:50%;
+  background:rgba(26,71,42,.2);
+  border:2px solid rgba(26,71,42,.3);
+  transition:all .3s;
+}
+.q-dot.right{background:var(--forest);border-color:var(--forest)}
+.q-dot.wrong{background:var(--rust);border-color:var(--rust)}
+.q-dot.current{background:var(--gold-dark);border-color:var(--gold-dark);transform:scale(1.3)}
+
+/* ── Birthday ── */
+.bday-input{
+  background:rgba(26,71,42,.08);
+  border:2px solid rgba(201,152,10,.4);
+  border-radius:40px;
+  padding:12px 24px;
+  font-size:1rem;color:var(--ink);
+  font-family:'Nunito',sans-serif;
+  text-align:center;outline:none;
+  width:220px;
+  transition:border-color .3s;
+}
+.bday-input:focus{border-color:var(--gold-dark);box-shadow:0 0 15px rgba(244,200,66,.25)}
+
+/* ── Final pin3 image ── */
+#pin3-display{
+  width:100%;max-width:320px;
+  border-radius:16px;
+  border:3px solid var(--gold);
+  margin:20px auto;display:block;
+  box-shadow:0 8px 30px rgba(0,0,0,.4);
+  animation:photoSlide .6s ease;
+}
+@keyframes photoSlide{
+  from{transform:rotate(-5deg) scale(.8);opacity:0}
+  to{transform:rotate(-1deg) scale(1);opacity:1}
+}
+
+/* ── Particles ── */
+.spark{
+  position:fixed;pointer-events:none;z-index:9998;
+  border-radius:50%;
+  animation:sparkFly .9s ease forwards;
+}
+@keyframes sparkFly{
+  0%{opacity:1;transform:translate(0,0) scale(1)}
+  100%{opacity:0;transform:translate(var(--tx),var(--ty)) scale(0)}
+}
+
+/* ── Heartbeat ── */
+@keyframes heartbeat{
+  0%,100%{transform:scale(1)}
+  25%{transform:scale(1.25)}
+  60%{transform:scale(.95)}
+}
+.heartbeat{animation:heartbeat 1.2s ease infinite;display:inline-block}
+
+/* ── Scroll reveal ── */
+.reveal{opacity:0;transform:translateY(16px);transition:all .5s ease}
+.reveal.shown{opacity:1;transform:none}
+
+/* ── Phone number reveal ── */
+.phone-reveal{
+  font-family:'Dancing Script',cursive;
+  font-size:2.2rem;
+  color:var(--forest);
+  letter-spacing:3px;
+  background:rgba(26,71,42,.1);
+  border:2px solid rgba(26,71,42,.3);
+  border-radius:16px;
+  padding:16px 32px;
+  margin:20px auto;
+  display:inline-block;
+  position:relative;
+  animation:numberGlow 1.5s ease infinite alternate;
+}
+@keyframes numberGlow{
+  from{box-shadow:0 0 10px rgba(45,106,79,.3)}
+  to{box-shadow:0 0 25px rgba(45,106,79,.6),0 0 50px rgba(244,200,66,.2)}
+}
+
+/* ── Responsive ── */
+@media(max-width:580px){
+  .book{padding:35px 22px;border-radius:4px 14px 14px 4px}
+  h1.title{font-size:1.7rem}
+  .ttt-board{width:200px}
+  .ttt-cell{width:60px;height:60px;font-size:1.8rem}
+}
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+<div id="progress-bar-wrap"><div id="progress-bar" style="width:11%"></div></div>
+
+<!-- Meme / image overlay -->
+<div id="img-overlay">
+  <img id="overlay-img" src="" alt="">
+</div>
+
+<!-- Horse steal element -->
+<div id="horse-steal">🐴💨</div>
+
+<!-- ══════════════════════════════════════════
+     SCENE 1 — Opening
+══════════════════════════════════════════ -->
+<div class="scene active" id="scene-1">
+  <div class="book" style="position:relative">
+    <div class="chapter-badge">Prologue</div>
+    <br>
+    <span class="hero-emoji">📖</span>
+    <h1 class="title">Once Upon a Time…</h1>
+    <div class="divider">✦ ✦ ✦</div>
+    <p class="txt">In a land not so far away, there lived a <em>stubborn hero</em> who made a few mistakes…</p>
+    <p class="txt">He was clumsy. He was awkward. He once lost an argument with a horse for twenty minutes — and the horse didn't even speak his language.</p>
+    <p class="txt">But there was one thing he was absolutely certain about —</p>
+    <span class="handwriting">"a girl named Mashka… who might decide his fate."</span>
+    <div class="divider">✦</div>
+    <p class="txt" style="font-size:.9rem;opacity:.7">This is that story. The horse has strong opinions. The frog is irrelevant.</p>
+    <br>
+    <button class="btn btn-gold" onclick="goTo(2)">Open the book →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCENE 2 — Mashka trapped
+══════════════════════════════════════════ -->
+<div class="scene" id="scene-2">
+  <div class="book" style="position:relative">
+    <div class="chapter-badge">Chapter I</div>
+    <br>
+    <span class="hero-emoji">🌙</span>
+    <h2 class="subtitle">The Enchanted Predicament</h2>
+    <div class="divider">✦ ✦ ✦</div>
+    <p class="txt">Our heroine Mashka was wandering through an enchanted forest when she found herself <em>completely, hopelessly, magically stuck.</em></p>
+    <p class="txt">A mischievous spell froze her path. The trees hummed. A frog offered advice. It was ignored <em>(as frogs often are).</em></p>
+    <p class="txt"><strong>Only one person in all the realms could save her now.</strong></p>
+    <div class="divider">✦</div>
+    <p class="txt" style="font-size:.9rem;opacity:.7">She waited. The forest held its breath…</p>
+    <br>
+    <button class="btn btn-gold" onclick="startRescue()">Continue…</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCENE 3 — Rescue
+══════════════════════════════════════════ -->
+<div class="scene" id="scene-3">
+  <div class="book" style="position:relative">
+    <div class="chapter-badge">Chapter II</div>
+    <br>
+    <span class="hero-emoji" id="rescue-ico">🦸</span>
+    <h2 class="subtitle">The Rescue</h2>
+    <div id="r1" class="txt">And then — <em>he appeared.</em></div>
+    <div id="r2" class="txt reveal">Through the enchanted fog, through the cursed brambles, through whatever that frog was doing — <em>he came.</em></div>
+    <div id="r3" class="txt reveal" style="color:var(--forest);font-weight:700">He broke the spell. He freed Mashka. She was safe.</div>
+    <div id="r4" class="txt reveal" style="color:var(--rust)">But the magic had a price. The hero collapsed, silent, still… having given <em>everything</em> to save her. 💫</div>
+    <br>
+    <div id="rescue-btn-area">
+      <button class="btn btn-ghost" onclick="nextRescueStep()">But how did he do it?</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCENE 4 — Coffee revival
+══════════════════════════════════════════ -->
+<div class="scene" id="scene-4">
+  <div class="book" style="position:relative">
+    <div class="chapter-badge">Chapter III</div>
+    <br>
+    <span class="hero-emoji">☕</span>
+    <h2 class="subtitle">The Revival</h2>
+    <div class="divider">✦ ✦ ✦</div>
+    <p class="txt">A wise old wizard appeared from behind a bush and cleared his throat dramatically.</p>
+    <span class="handwriting">"He can be revived… with a coffee."</span>
+    <p class="txt" style="font-size:.9rem;opacity:.7">The wizard vanished. The frog nodded knowingly.</p>
+    <div class="divider">✦</div>
+    <p class="txt">Would you buy him a coffee?</p>
+    <div id="coffee-btns">
+      <button class="btn btn-green" onclick="goTo(5)">Yes, of course ☕</button>
+      <button class="btn btn-red" id="no-btn" onclick="pressNo()">No 🙅</button>
+    </div>
+    <p id="no-msg" style="display:none;font-family:'Dancing Script',cursive;font-size:1.1rem;color:var(--rust);margin-top:14px"></p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCENE 5 — Second chance
+══════════════════════════════════════════ -->
+<div class="scene" id="scene-5">
+  <div class="book" style="position:relative">
+    <div class="chapter-badge">Chapter IV</div>
+    <br>
+    <span class="hero-emoji">⏳</span>
+    <h2 class="subtitle">The Second Chance</h2>
+    <div class="divider">✦ ✦ ✦</div>
+    <p class="txt">The hero stirred. He opened one eye. Then the other. He immediately tripped over the frog. Some things never change.</p>
+    <span class="handwriting">"What about… a second chance?"</span>
+    <div class="divider">✦</div>
+    <p class="txt">He waited. Three whole weeks passed in silence.</p>
+    <p class="txt">The birds stopped singing. The frog got a part-time job. The horse wrote a strongly worded letter.</p>
+    <span class="handwriting" style="color:var(--rust)">"After three weeks… at least a follow back would be nice."</span>
+    <br><br>
+    <button class="btn btn-gold" onclick="goTo(6)">What happened next? →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCENE 6 — Tic Tac Toe
+══════════════════════════════════════════ -->
+<div class="scene" id="scene-6">
+  <div class="book" style="position:relative">
+    <div class="chapter-badge">The Challenge</div>
+    <br>
+    <span class="horse-emoji">🐴</span>
+    <h2 class="subtitle">A Friendly Game</h2>
+    <p class="txt">The horse trotted forward and planted a tiny game board in front of Mashka.</p>
+    <span class="handwriting">"Beat me at tic-tac-toe… and I'll put a good word in."</span>
+    <p class="txt" style="font-size:.85rem;opacity:.7">You are <strong style="color:var(--rust)">✕</strong> — the horse is <strong style="color:var(--forest)">○</strong></p>
+
+    <div class="ttt-board" id="ttt-board">
+      <!-- cells injected by JS -->
+    </div>
+    <div class="ttt-status" id="ttt-status">Your move, Mashka.</div>
+    <div id="ttt-btns" style="display:none">
+      <button class="btn btn-ghost" onclick="resetTTT()" style="margin-right:8px">Play again 🔄</button>
+      <button class="btn btn-gold" id="ttt-next-btn" onclick="goTo(7)" style="display:none">Move on →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCENE 7 — Horse quiz
+══════════════════════════════════════════ -->
+<div class="scene" id="scene-7">
+  <div class="book" style="position:relative">
+    <div class="chapter-badge">The Knowledge Test</div>
+    <br>
+    <span class="horse-emoji">🐴</span>
+    <h2 class="subtitle">Horse Knowledge Quiz</h2>
+    <p class="txt">The horse cleared its throat and put on a tiny pair of reading glasses.</p>
+    <span class="handwriting">"Let's see how well you know me… 5 questions. Get 3 right and I'll reveal something special."</span>
+    <div class="divider">✦ ✦ ✦</div>
+
+    <div class="quiz-progress" id="quiz-dots">
+      <div class="q-dot current" id="qd0"></div>
+      <div class="q-dot" id="qd1"></div>
+      <div class="q-dot" id="qd2"></div>
+      <div class="q-dot" id="qd3"></div>
+      <div class="q-dot" id="qd4"></div>
+    </div>
+
+    <div id="quiz-area">
+      <div class="quiz-question" id="quiz-q"></div>
+      <div class="quiz-options" id="quiz-opts"></div>
+      <div class="quiz-score" id="quiz-score-line"></div>
+    </div>
+
+    <div id="quiz-result" style="display:none">
+      <!-- filled by JS -->
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCENE 8 — Birthday
+══════════════════════════════════════════ -->
+<div class="scene" id="scene-8">
+  <div class="book" style="position:relative">
+    <div class="chapter-badge">The Surprise</div>
+    <br>
+    <span class="horse-emoji">🐴</span>
+    <h2 class="subtitle">A Better Surprise</h2>
+    <div class="divider">✦ ✦ ✦</div>
+    <span class="handwriting">"Alright Mash… enter your birthday."</span>
+    <p class="txt"><em>"I might have a better surprise."</em></p>
+    <p class="txt" style="font-size:.85rem;opacity:.6">(The horse winked. It was unsettling.)</p>
+    <br>
+    <input type="date" class="bday-input" id="bday-in">
+    <br><br>
+    <button class="btn btn-gold" onclick="submitBday()">Reveal ✨</button>
+    <div id="bday-result" style="display:none;margin-top:20px"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCENE 9 — Final
+══════════════════════════════════════════ -->
+<div class="scene" id="scene-9">
+  <div class="book" style="position:relative">
+    <div class="chapter-badge">The End… or is it?</div>
+    <br>
+    <span class="heartbeat" style="font-size:4rem;display:block;margin-bottom:16px">💜</span>
+    <h1 class="title">One Last Thing, Mash</h1>
+    <div class="divider">✦ ✦ ✦</div>
+
+    <img id="pin3-display" src="pin3.jpg" alt="trash men">
+    <span class="handwriting" style="font-size:1.6rem;color:var(--rust)">
+      "May God keep sending you trash men…<br>until you pick me. Amen."
+    </span>
+
+    <div class="divider">🙏 ✦ 🙏</div>
+    <p class="txt"><em>"Mash, I'm not the same princess you once knew…"</em></p>
+    <p class="txt" style="font-size:1.25rem;color:var(--rust);font-weight:700">
+      <em>"Give me another chance."</em>
+    </p>
+    <span class="handwriting" style="font-size:1.8rem">Hehe. 🙃</span>
+    <div class="divider">✦</div>
+    <div class="horse-emoji" style="font-size:2.5rem;margin:6px 0">🐴</div>
+    <p class="txt" style="font-size:.8rem;opacity:.5;font-style:italic">The horse approves this message.</p>
+    <br>
+    <button class="btn btn-ghost" onclick="restartStory()">Read it again 📖</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════ -->
+<script>
+// ── GLOBALS ──────────────────────────────────────────────────
+const TOTAL = 9;
+let currentScene = 1;
+let rescueStep = 0;
+let noCount = 0;
+
+// ── BG CANVAS ─────────────────────────────────────────────────
+(function(){
+  const c = document.getElementById('bg-canvas');
+  const ctx = c.getContext('2d');
+  let pts = [];
+
+  function resize(){ c.width=innerWidth; c.height=innerHeight; }
+
+  function init(){
+    pts=[];
+    for(let i=0;i<120;i++){
+      pts.push({
+        x:Math.random()*c.width, y:Math.random()*c.height,
+        r:Math.random()*1.4+.3,
+        a:Math.random(), spd:Math.random()*.006+.002,
+        dir:Math.random()>.5?1:-1
+      });
+    }
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,c.width,c.height);
+    pts.forEach(p=>{
+      p.a+=p.spd*p.dir;
+      if(p.a>=1||p.a<=0) p.dir*=-1;
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(244,200,66,${p.a*.5})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+
+  resize(); init(); draw();
+  addEventListener('resize',()=>{ resize(); init(); });
+})();
+
+// ── SCENE NAV ─────────────────────────────────────────────────
+function goTo(n){
+  document.getElementById(`scene-${currentScene}`).classList.remove('active');
+  currentScene=n;
+  const next=document.getElementById(`scene-${n}`);
+  next.classList.add('active');
+  document.getElementById('progress-bar').style.width=(n/TOTAL*100)+'%';
+  window.scrollTo(0,0);
+
+  if(n===6) initTTT();
+  if(n===7) initQuiz();
+}
+
+// ── SCENE 3: Rescue steps ─────────────────────────────────────
+let rStep=0;
+const rEls=['r2','r3','r4'];
+
+function startRescue(){
+  document.querySelector('#scene-2 .btn-gold').disabled=true;
+  goTo(3);
+  setTimeout(()=>autoReveal(),600);
+}
+
+function autoReveal(){
+  if(rStep<rEls.length){
+    const el=document.getElementById(rEls[rStep]);
+    el.classList.add('shown');
+    rStep++;
+    if(rStep<rEls.length){
+      setTimeout(autoReveal, 1800);
+    } else {
+      setTimeout(()=>{
+        document.getElementById('rescue-btn-area').innerHTML=
+          '<button class="btn btn-gold" onclick="goTo(4)">And then…? →</button>';
+      },1400);
+    }
+  }
+}
+
+function nextRescueStep(){ autoReveal(); }
+
+// ── SCENE 4: No button ────────────────────────────────────────
+const NO_IMAGES=['pin1.jpg','pin2.jpg','pin4.jpg','pin5.jpg'];
+const NO_MSGS=[
+  "…the horse raised an eyebrow.",
+  "…the wizard sighed from behind his bush.",
+  "…even the frog looked disappointed.",
+  "Okay the horse is done negotiating 🐴"
+];
+
+function pressNo(){
+  if(noCount >= NO_IMAGES.length){
+    // No more No button — horse stole it for good
+    return;
+  }
+
+  showOverlayImg(NO_IMAGES[noCount]);
+  noCount++;
+
+  const noMsg=document.getElementById('no-msg');
+  noMsg.style.display='block';
+  noMsg.textContent=NO_MSGS[noCount-1]||NO_MSGS[NO_MSGS.length-1];
+
+  if(noCount >= NO_IMAGES.length){
+    // Horse gallops in and steals the button permanently
+    horseSteal();
+  } else {
+    // Button briefly disappears then reappears
+    const btn=document.getElementById('no-btn');
+    btn.style.visibility='hidden';
+    btn.disabled=true;
+    setTimeout(()=>{
+      btn.style.visibility='visible';
+      btn.disabled=false;
+    }, 1400);
+  }
+}
+
+function horseSteal(){
+  const btn=document.getElementById('no-btn');
+  const rect=btn.getBoundingClientRect();
+  const horse=document.getElementById('horse-steal');
+  horse.style.display='block';
+  horse.style.top=(rect.top+rect.height/2-20)+'px';
+  horse.style.left='-150px';
+  horse.style.transition='left .55s cubic-bezier(.4,0,.2,1)';
+  requestAnimationFrame(()=>{
+    horse.style.left=(rect.left-30)+'px';
+    setTimeout(()=>{
+      btn.remove();
+      sparks(rect.left+rect.width/2, rect.top+rect.height/2,'#c0392b');
+      horse.style.transition='left .4s ease-in';
+      horse.style.left='-200px';
+      setTimeout(()=>{ horse.style.display='none'; }, 500);
+      document.getElementById('coffee-btns').innerHTML+=
+        '<br><button class="btn btn-green" onclick="goTo(5)" style="margin-top:12px">…Fine. Yes. ☕</button>';
+      const nm=document.getElementById('no-msg');
+      nm.textContent="The horse has spoken. There is no No.";
+    },580);
+  });
+}
+
+// ── Image overlay ─────────────────────────────────────────────
+function showOverlayImg(src){
+  const ov=document.getElementById('img-overlay');
+  document.getElementById('overlay-img').src=src;
+  ov.classList.add('show');
+  setTimeout(()=>ov.classList.remove('show'), 1300);
+}
+
+// ── TIC TAC TOE ───────────────────────────────────────────────
+let tttBoard, tttActive, tttLosses;
+
+function initTTT(){
+  tttBoard = Array(9).fill('');
+  tttActive = true;
+  tttLosses = (tttLosses||0);
+  const board=document.getElementById('ttt-board');
+  board.innerHTML='';
+  for(let i=0;i<9;i++){
+    const cell=document.createElement('div');
+    cell.className='ttt-cell';
+    cell.dataset.i=i;
+    cell.addEventListener('click',()=>tttClick(i));
+    board.appendChild(cell);
+  }
+  document.getElementById('ttt-status').textContent='Your move, Mashka. 🐾';
+  document.getElementById('ttt-btns').style.display='none';
+  document.getElementById('ttt-next-btn') && (document.getElementById('ttt-next-btn').style.display='none');
+}
+
+function tttClick(i){
+  if(!tttActive||tttBoard[i]) return;
+  tttBoard[i]='X';
+  renderTTT();
+  const win=checkWin(tttBoard,'X');
+  if(win){ endTTT('X',win); return; }
+  if(tttBoard.every(c=>c)){ endTTTDraw(); return; }
+
+  document.getElementById('ttt-status').textContent='🐴 thinking…';
+  setTimeout(()=>aiMove(),500);
+}
+
+function aiMove(){
+  // Minimax — AI always plays optimally as O to always win or draw
+  const idx=bestMove(tttBoard);
+  tttBoard[idx]='O';
+  renderTTT();
+  const win=checkWin(tttBoard,'O');
+  if(win){ endTTT('O',win); return; }
+  if(tttBoard.every(c=>c)){ endTTTDraw(); return; }
+  document.getElementById('ttt-status').textContent='Your move, Mashka. 🐾';
+}
+
+function renderTTT(){
+  const cells=document.querySelectorAll('.ttt-cell');
+  cells.forEach((c,i)=>{
+    c.textContent = tttBoard[i]==='X'?'✕':tttBoard[i]==='O'?'○':'';
+    c.className='ttt-cell'+(tttBoard[i]?' taken':'')+(tttBoard[i]==='X'?' x-cell':tttBoard[i]==='O'?' o-cell':'');
+  });
+}
+
+function checkWin(board,p){
+  const lines=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+  return lines.find(l=>l.every(i=>board[i]===p))||null;
+}
+
+function endTTT(winner,line){
+  tttActive=false;
+  const cells=document.querySelectorAll('.ttt-cell');
+  line.forEach(i=>cells[i].classList.add('win-cell'));
+  const btn=document.getElementById('ttt-btns');
+  btn.style.display='block';
+
+  if(winner==='O'){
+    tttLosses++;
+    document.getElementById('ttt-status').textContent='🐴 "Neigh neigh neigh… that means I win!"';
+    if(tttLosses>=2){
+      document.getElementById('ttt-next-btn').style.display='inline-block';
+    }
+  } else {
+    // Shouldn't happen, but just in case
+    document.getElementById('ttt-status').textContent='Wait how did you— the horse demands a rematch.';
+    document.getElementById('ttt-next-btn').style.display='inline-block';
+  }
+}
+
+function endTTTDraw(){
+  tttActive=false;
+  tttLosses++;
+  document.getElementById('ttt-status').textContent='🐴 "A draw? I let you off easy. For now."';
+  document.getElementById('ttt-btns').style.display='block';
+  if(tttLosses>=2) document.getElementById('ttt-next-btn').style.display='inline-block';
+}
+
+function resetTTT(){ initTTT(); }
+
+// Minimax
+function bestMove(board){
+  let best=-Infinity, bestI=null;
+  for(let i=0;i<9;i++){
+    if(!board[i]){
+      board[i]='O';
+      const score=minimax(board,false,0);
+      board[i]='';
+      if(score>best){ best=score; bestI=i; }
+    }
+  }
+  return bestI;
+}
+function minimax(board,isMax,depth){
+  if(checkWin(board,'O')) return 10-depth;
+  if(checkWin(board,'X')) return depth-10;
+  if(board.every(c=>c)) return 0;
+  if(isMax){
+    let best=-Infinity;
+    for(let i=0;i<9;i++) if(!board[i]){
+      board[i]='O';best=Math.max(best,minimax(board,false,depth+1));board[i]='';
+    }
+    return best;
+  } else {
+    let best=Infinity;
+    for(let i=0;i<9;i++) if(!board[i]){
+      board[i]='X';best=Math.min(best,minimax(board,true,depth+1));board[i]='';
+    }
+    return best;
+  }
+}
+
+// ── QUIZ ──────────────────────────────────────────────────────
+const QUESTIONS=[
+  {
+    q:"How many hooves does a horse have?",
+    opts:["2","3","4","6"],
+    ans:2
+  },
+  {
+    q:"What do you call a baby horse?",
+    opts:["Cub","Foal","Pup","Fawn"],
+    ans:1
+  },
+  {
+    q:"How is a horse's height measured?",
+    opts:["Metres","Feet","Hands","Hooves"],
+    ans:2
+  },
+  {
+    q:"What is the fastest gait of a horse?",
+    opts:["Trot","Canter","Gallop","Prance"],
+    ans:2
+  },
+  {
+    q:"What do horses mostly eat?",
+    opts:["Meat & bones","Grass, hay & grain","Fish","Berries & nuts"],
+    ans:1
+  }
+];
+
+let qIndex=0, qScore=0, qAnswered=false;
+
+function initQuiz(){
+  qIndex=0; qScore=0; qAnswered=false;
+  document.getElementById('quiz-area').style.display='block';
+  document.getElementById('quiz-result').style.display='none';
+  document.getElementById('quiz-score-line').textContent='';
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const q=QUESTIONS[qIndex];
+  document.getElementById('quiz-q').textContent=(qIndex+1)+". "+q.q;
+  const optsEl=document.getElementById('quiz-opts');
+  optsEl.innerHTML='';
+  q.opts.forEach((o,i)=>{
+    const btn=document.createElement('button');
+    btn.className='quiz-opt';
+    btn.textContent=o;
+    btn.addEventListener('click',()=>answerQ(i));
+    optsEl.appendChild(btn);
+  });
+  qAnswered=false;
+
+  // Update dots
+  for(let i=0;i<5;i++){
+    const d=document.getElementById(`qd${i}`);
+    d.className='q-dot'+(i===qIndex?' current':'');
+  }
+
+  document.getElementById('quiz-score-line').textContent=`Score: ${qScore} / ${qIndex}`;
+}
+
+function answerQ(chosen){
+  if(qAnswered) return;
+  qAnswered=true;
+  const q=QUESTIONS[qIndex];
+  const opts=document.querySelectorAll('.quiz-opt');
+  opts.forEach(o=>o.classList.add('answered'));
+  opts[q.ans].classList.add('correct');
+  if(chosen!==q.ans){ opts[chosen].classList.add('wrong'); }
+  else { qScore++; sparks(innerWidth/2, innerHeight/2,'#2d6a4f'); }
+
+  // Update dot
+  const d=document.getElementById(`qd${qIndex}`);
+  d.className='q-dot '+(chosen===q.ans?'right':'wrong');
+
+  qIndex++;
+  document.getElementById('quiz-score-line').textContent=`Score: ${qScore} / ${qIndex}`;
+
+  if(qIndex<QUESTIONS.length){
+    setTimeout(renderQuestion,1200);
+  } else {
+    setTimeout(showQuizResult,1200);
+  }
+}
+
+function showQuizResult(){
+  document.getElementById('quiz-area').style.display='none';
+  const res=document.getElementById('quiz-result');
+  res.style.display='block';
+
+  if(qScore>=3){
+    res.innerHTML=`
+      <span style="font-size:3.5rem;display:block;margin-bottom:10px" class="heartbeat">🎉</span>
+      <span class="handwriting" style="font-size:1.8rem;color:var(--forest)">WOHOOO! ${qScore}/5 — You WIN!</span>
+      <p class="txt" style="margin-top:14px">The horse bowed deeply. Even the frog applauded.</p>
+      <span class="handwriting" style="font-size:1.1rem;color:var(--brown)">"Here's what you've earned, Mash…"</span>
+      <div class="phone-reveal">📞 0780708839</div>
+      <p class="txt" style="font-size:.85rem;opacity:.7;font-style:italic">Use it wisely. The horse is watching.</p>
+      <br>
+      <button class="btn btn-gold" onclick="goTo(8)">One more thing… →</button>
+    `;
+    sparks(innerWidth/2,innerHeight/2,'#f4c842');
+    setTimeout(()=>sparks(innerWidth/3,innerHeight/3,'#2d6a4f'),300);
+    setTimeout(()=>sparks(innerWidth*2/3,innerHeight*2/3,'#c0392b'),600);
+  } else {
+    res.innerHTML=`
+      <span style="font-size:3.5rem;display:block;margin-bottom:10px">🐴</span>
+      <span class="handwriting" style="font-size:1.5rem;color:var(--rust)">"${qScore}/5… not quite."</span>
+      <p class="txt" style="margin-top:14px">The horse shook its mane sadly. But kindly.</p>
+      <span class="handwriting" style="font-size:1.1rem;color:var(--brown)">"Study up on horses and try again, Mash."</span>
+      <br>
+      <button class="btn btn-ghost" onclick="initQuiz()" style="margin-right:8px">Try again 🔄</button>
+      <button class="btn btn-gold" onclick="goTo(8)">Skip ahead →</button>
+    `;
+  }
+}
+
+// ── BIRTHDAY ──────────────────────────────────────────────────
+function submitBday(){
+  const val=document.getElementById('bday-in').value;
+  const res=document.getElementById('bday-result');
+  res.style.display='block';
+  if(!val){
+    res.innerHTML=`<span class="handwriting" style="color:var(--rust)">"...the horse is waiting, Mash."</span>`;
+    return;
+  }
+  const d=new Date(val);
+  const m=d.getMonth()+1, day=d.getDate();
+  const zodiac=getZodiac(m,day);
+  const msg=bdayMsg(m,day);
+  res.innerHTML=`
+    <div class="divider">✨ ✦ ✨</div>
+    <span class="handwriting" style="font-size:1.3rem;color:var(--forest)">"A ${zodiac} on the ${day}th — interesting."</span>
+    <p class="txt" style="margin-top:12px">${msg}</p>
+    <div class="divider">✦</div>
+    <button class="btn btn-gold" onclick="goTo(9)">The final page… →</button>
+  `;
+  sparks(innerWidth/2,innerHeight/2,'#f4c842');
+}
+
+function getZodiac(m,d){
+  const s=[
+    [1,20,'Aquarius'],[2,19,'Pisces'],[3,21,'Aries'],[4,20,'Taurus'],
+    [5,21,'Gemini'],[6,21,'Cancer'],[7,23,'Leo'],[8,23,'Virgo'],
+    [9,23,'Libra'],[10,23,'Scorpio'],[11,22,'Sagittarius'],[12,22,'Capricorn']
+  ];
+  for(let i=s.length-1;i>=0;i--) if(m>s[i][0]||(m===s[i][0]&&d>=s[i][1])) return s[i][2];
+  return 'Capricorn';
+}
+function bdayMsg(m,day){
+  const msgs=[
+    `"People born in this season are known to be fiercely loyal, brilliantly stubborn, and impossible to forget." — probably a horse`,
+    `"The stars confirm: born on the ${day}th means you have excellent taste. Mostly." 🌟`,
+    `"Apparently ${day}/${m} babies are the most charming in all the realm. The horse agrees." 🐴`,
+    `"Born in that month? No wonder everything's complicated. The best kind of complicated." 🌿`,
+    `"The universe planned something special that day. We can tell." ✨`
+  ];
+  return msgs[(m+day)%msgs.length];
+}
+
+// ── PARTICLES ─────────────────────────────────────────────────
+function sparks(cx,cy,color){
+  const cols=[color,'#f4c842','#fdf6e3','#c0392b','#2d6a4f'];
+  for(let i=0;i<18;i++){
+    const p=document.createElement('div');
+    p.className='spark';
+    const sz=Math.random()*8+4;
+    const a=Math.random()*Math.PI*2;
+    const dist=Math.random()*130+50;
+    p.style.cssText=`width:${sz}px;height:${sz}px;background:${cols[Math.floor(Math.random()*cols.length)]};left:${cx-sz/2}px;top:${cy-sz/2}px;--tx:${Math.cos(a)*dist}px;--ty:${Math.sin(a)*dist}px`;
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(),900);
+  }
+}
+
+// ── RESTART ───────────────────────────────────────────────────
+function restartStory(){
+  rStep=0; noCount=0;
+  tttLosses=0;
+
+  // Reset rescue
+  ['r2','r3','r4'].forEach(id=>document.getElementById(id).classList.remove('shown'));
+  document.getElementById('rescue-ico').textContent='🦸';
+  document.getElementById('rescue-btn-area').innerHTML=
+    '<button class="btn btn-ghost" onclick="nextRescueStep()">But how did he do it?</button>';
+
+  // Reset coffee
+  document.getElementById('coffee-btns').innerHTML=
+    '<button class="btn btn-green" onclick="goTo(5)">Yes, of course ☕</button>'+
+    '<button class="btn btn-red" id="no-btn" onclick="pressNo()">No 🙅</button>';
+  document.getElementById('no-msg').style.display='none';
+  document.getElementById('no-msg').textContent='';
+
+  // Reset bday
+  document.getElementById('bday-in').value='';
+  document.getElementById('bday-result').style.display='none';
+
+  goTo(1);
+}
+</script>
+</body>
+</html>
