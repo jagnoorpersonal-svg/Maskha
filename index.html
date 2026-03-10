@@ -5,32 +5,32 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>A Story for Mashka 📖</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Nunito:wght@400;600;700;900&family=Dancing+Script:wght@600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Quicksand:wght@400;600;700&family=Pacifico&display=swap');
 
 *{margin:0;padding:0;box-sizing:border-box}
 
 :root{
-  --gold:#f4c842;
-  --gold-dark:#c9980a;
-  --cream:#fdf6e3;
-  --rust:#c0392b;
-  --forest:#1a472a;
-  --forest-light:#2d6a4f;
-  --brown:#5c3317;
-  --parchment:#f5e6c8;
-  --ink:#2c1810;
-  --rose:#e8748a;
-  --accent:#8b2fc9;
+  --gold:#f9a825;
+  --gold-dark:#e65100;
+  --cream:#fff8f0;
+  --rust:#d84315;
+  --forest:#00695c;
+  --forest-light:#26a69a;
+  --brown:#4e342e;
+  --parchment:#fff3e0;
+  --ink:#1a1a2e;
+  --rose:#e91e8c;
+  --accent:#7c4dff;
 }
 
 body{
-  background: #0d1b0f;
+  background: #0f0c29;
   background-image:
-    radial-gradient(ellipse at 20% 20%, rgba(26,71,42,0.4) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 80%, rgba(139,47,201,0.15) 0%, transparent 60%),
-    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f4c842' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    radial-gradient(ellipse at 15% 25%, rgba(124,77,255,0.25) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 70%, rgba(0,105,92,0.2) 0%, transparent 55%),
+    radial-gradient(ellipse at 50% 50%, rgba(233,30,140,0.07) 0%, transparent 70%);
   color:var(--cream);
-  font-family:'Nunito',sans-serif;
+  font-family:'Quicksand',sans-serif;
   min-height:100vh;
   overflow-x:hidden;
 }
@@ -63,17 +63,17 @@ body{
 /* ── Book / parchment card ── */
 .book{
   position:relative;
-  background: linear-gradient(160deg, #fdf6e3 0%, #f5e6c8 40%, #ecd9b0 100%);
-  border-radius:4px 18px 18px 4px;
+  background: linear-gradient(160deg, #fff8f0 0%, #fce4ec 40%, #ede7f6 100%);
+  border-radius:4px 20px 20px 4px;
   padding:50px 55px;
   max-width:680px;width:100%;
   color:var(--ink);
   box-shadow:
-    -6px 0 0 #c9980a,
-    -10px 0 0 #b8860b,
+    -6px 0 0 #7c4dff,
+    -10px 0 0 #651fff,
     0 20px 60px rgba(0,0,0,.6),
-    inset 0 0 80px rgba(244,200,66,.08);
-  border:1px solid rgba(201,152,10,.4);
+    inset 0 0 80px rgba(124,77,255,.05);
+  border:1px solid rgba(124,77,255,.3);
 }
 
 /* book spine decoration */
@@ -81,7 +81,7 @@ body{
   content:'';
   position:absolute;left:-6px;top:10px;bottom:10px;
   width:6px;
-  background:linear-gradient(180deg,#f4c842,#c9980a 50%,#f4c842);
+  background:linear-gradient(180deg,#7c4dff,#e91e8c 50%,#7c4dff);
   border-radius:3px 0 0 3px;
 }
 
@@ -93,7 +93,7 @@ body{
 }
 
 .chapter-label{
-  font-family:'Playfair Display',serif;
+  font-family:'Cormorant Garamond',serif;
   font-size:.75rem;font-weight:700;
   letter-spacing:4px;text-transform:uppercase;
   color:var(--gold-dark);
@@ -102,7 +102,7 @@ body{
 }
 
 h1.title{
-  font-family:'Playfair Display',serif;
+  font-family:'Cormorant Garamond',serif;
   font-size:2.4rem;font-weight:900;
   color:var(--ink);
   line-height:1.25;
@@ -111,7 +111,7 @@ h1.title{
 }
 
 h2.subtitle{
-  font-family:'Playfair Display',serif;
+  font-family:'Cormorant Garamond',serif;
   font-size:1.5rem;font-style:italic;
   color:var(--brown);
   margin-bottom:22px;
@@ -131,13 +131,13 @@ p.txt{
   font-size:1.05rem;line-height:1.9;
   color:#3a2010;
   margin-bottom:14px;
-  font-family:'Playfair Display',serif;
+  font-family:'Cormorant Garamond',serif;
 }
 p.txt em{color:var(--rust);font-style:italic}
 p.txt strong{color:var(--forest)}
 
 .handwriting{
-  font-family:'Dancing Script',cursive;
+  font-family:'Pacifico',cursive;
   font-size:1.4rem;color:var(--rust);
   margin:10px 0;
   display:block;
@@ -148,7 +148,7 @@ p.txt strong{color:var(--forest)}
   display:inline-block;
   padding:13px 38px;margin:8px;
   border-radius:40px;
-  font-family:'Nunito',sans-serif;
+  font-family:'Quicksand',sans-serif;
   font-size:1rem;font-weight:800;
   cursor:pointer;border:none;
   transition:all .25s ease;
@@ -219,9 +219,9 @@ p.txt strong{color:var(--forest)}
 }
 #progress-bar{
   height:100%;
-  background:linear-gradient(90deg,#2d6a4f,#f4c842,#c0392b);
+  background:linear-gradient(90deg,#7c4dff,#e91e8c,#f9a825);
   transition:width .6s ease;
-  box-shadow:0 0 10px rgba(244,200,66,.6);
+  box-shadow:0 0 10px rgba(233,30,140,.6);
 }
 
 /* ── Chapter badge ── */
@@ -229,7 +229,7 @@ p.txt strong{color:var(--forest)}
   position:absolute;top:-18px;left:50%;transform:translateX(-50%);
   background:linear-gradient(135deg,#1a472a,#2d6a4f);
   color:var(--gold);
-  font-family:'Playfair Display',serif;
+  font-family:'Cormorant Garamond',serif;
   font-size:.75rem;font-weight:700;
   letter-spacing:3px;text-transform:uppercase;
   padding:6px 22px;border-radius:30px;
@@ -288,7 +288,7 @@ p.txt strong{color:var(--forest)}
   display:flex;align-items:center;justify-content:center;
   font-size:2.2rem;cursor:pointer;
   transition:all .2s;
-  font-family:'Playfair Display',serif;
+  font-family:'Cormorant Garamond',serif;
 }
 .ttt-cell:hover:not(.taken){
   background:rgba(244,200,66,.1);
@@ -308,7 +308,7 @@ p.txt strong{color:var(--forest)}
   to{box-shadow:0 0 15px rgba(244,200,66,.6)}
 }
 .ttt-status{
-  font-family:'Playfair Display',serif;
+  font-family:'Cormorant Garamond',serif;
   font-size:1rem;
   color:var(--brown);
   min-height:28px;
@@ -318,7 +318,7 @@ p.txt strong{color:var(--forest)}
 
 /* ── QUIZ ── */
 .quiz-question{
-  font-family:'Playfair Display',serif;
+  font-family:'Cormorant Garamond',serif;
   font-size:1.1rem;color:var(--ink);
   line-height:1.7;margin-bottom:18px;
   font-style:italic;
@@ -333,7 +333,7 @@ p.txt strong{color:var(--forest)}
   border-radius:12px;
   padding:12px 20px;
   cursor:pointer;
-  font-family:'Nunito',sans-serif;
+  font-family:'Quicksand',sans-serif;
   font-size:.95rem;font-weight:700;
   color:var(--ink);
   transition:all .2s;
@@ -355,7 +355,7 @@ p.txt strong{color:var(--forest)}
   color:var(--rust);
 }
 .quiz-score{
-  font-family:'Dancing Script',cursive;
+  font-family:'Pacifico',cursive;
   font-size:1.3rem;color:var(--brown);
 }
 .quiz-progress{
@@ -378,7 +378,7 @@ p.txt strong{color:var(--forest)}
   border-radius:40px;
   padding:12px 24px;
   font-size:1rem;color:var(--ink);
-  font-family:'Nunito',sans-serif;
+  font-family:'Quicksand',sans-serif;
   text-align:center;outline:none;
   width:220px;
   transition:border-color .3s;
@@ -424,7 +424,7 @@ p.txt strong{color:var(--forest)}
 
 /* ── Phone number reveal ── */
 .phone-reveal{
-  font-family:'Dancing Script',cursive;
+  font-family:'Pacifico',cursive;
   font-size:2.2rem;
   color:var(--forest);
   letter-spacing:3px;
@@ -544,7 +544,7 @@ p.txt strong{color:var(--forest)}
       <button class="btn btn-green" onclick="goTo(5)">Yes, of course ☕</button>
       <button class="btn btn-red" id="no-btn" onclick="pressNo()">No 🙅</button>
     </div>
-    <p id="no-msg" style="display:none;font-family:'Dancing Script',cursive;font-size:1.1rem;color:var(--rust);margin-top:14px"></p>
+    <p id="no-msg" style="display:none;font-family:'Pacifico',cursive;font-size:1.1rem;color:var(--rust);margin-top:14px"></p>
   </div>
 </div>
 
@@ -561,9 +561,9 @@ p.txt strong{color:var(--forest)}
     <p class="txt">The hero stirred. He opened one eye. Then the other. He immediately tripped over the frog. Some things never change.</p>
     <span class="handwriting">"What about… a second chance?"</span>
     <div class="divider">✦</div>
-    <p class="txt">He waited. Three whole weeks passed in silence.</p>
+    <p class="txt">He waited. Three whole <em>websites</em> were built in silence.</p>
     <p class="txt">The birds stopped singing. The frog got a part-time job. The horse wrote a strongly worded letter.</p>
-    <span class="handwriting" style="color:var(--rust)">"After three weeks… at least a follow back would be nice."</span>
+    <span class="handwriting" style="color:var(--rust)">"After three websites… a follow back would be nice. I'll be less annoying haha"</span>
     <br><br>
     <button class="btn btn-gold" onclick="goTo(6)">What happened next? →</button>
   </div>
