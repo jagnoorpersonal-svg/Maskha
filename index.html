@@ -51,13 +51,28 @@ body{
   align-items:center;justify-content:center;
   padding:30px 16px;
   text-align:center;
-  animation:sceneFadeIn .7s cubic-bezier(.4,0,.2,1);
 }
 .scene.active{display:flex}
 
-@keyframes sceneFadeIn{
-  from{opacity:0;transform:translateY(30px) scale(.97)}
-  to{opacity:1;transform:translateY(0) scale(1)}
+/* ── Page flip ── */
+.scene.flip-in .book{
+  animation:pageFlipIn .65s cubic-bezier(.4,0,.2,1) both;
+  transform-origin:left center;
+}
+.scene.flip-out .book{
+  animation:pageFlipOut .45s cubic-bezier(.4,0,.8,1) both;
+  transform-origin:left center;
+}
+
+@keyframes pageFlipIn{
+  0%  {opacity:0;transform:perspective(1200px) rotateY(-90deg) translateX(-40px) scale(.95);}
+  60% {opacity:1;transform:perspective(1200px) rotateY(6deg);}
+  80% {transform:perspective(1200px) rotateY(-2deg);}
+  100%{opacity:1;transform:perspective(1200px) rotateY(0deg) translateX(0) scale(1);}
+}
+@keyframes pageFlipOut{
+  0%  {opacity:1;transform:perspective(1200px) rotateY(0deg);}
+  100%{opacity:0;transform:perspective(1200px) rotateY(90deg) translateX(40px) scale(.95);}
 }
 
 /* ── Book / parchment card ── */
@@ -726,15 +741,25 @@ let noCount = 0;
 
 // ── SCENE NAV ─────────────────────────────────────────────────
 function goTo(n){
-  document.getElementById(`scene-${currentScene}`).classList.remove('active');
-  currentScene=n;
-  const next=document.getElementById(`scene-${n}`);
-  next.classList.add('active');
-  document.getElementById('progress-bar').style.width=(n/TOTAL*100)+'%';
-  window.scrollTo(0,0);
+  const prev=document.getElementById(`scene-${currentScene}`);
 
-  if(n===6) initTTT();
-  if(n===7) initQuiz();
+  // Flip out the current scene's book
+  prev.classList.add('flip-out');
+  setTimeout(()=>{
+    prev.classList.remove('active','flip-out');
+
+    currentScene=n;
+    const next=document.getElementById(`scene-${n}`);
+    next.classList.add('active','flip-in');
+    document.getElementById('progress-bar').style.width=(n/TOTAL*100)+'%';
+    window.scrollTo(0,0);
+
+    // Remove flip-in class after animation ends
+    setTimeout(()=>next.classList.remove('flip-in'), 700);
+
+    if(n===6) initTTT();
+    if(n===7) initQuiz();
+  }, 460);
 }
 
 // ── SCENE 3: Rescue steps ─────────────────────────────────────
